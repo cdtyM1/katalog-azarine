@@ -1,1 +1,225 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Katalog Azarine 2026</title><style>*{box-sizing:border-box}body{margin:0;background:#0f1715;color:#fff;font-family:Arial,sans-serif;overflow:hidden}.top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#173d35}.brand{font-weight:700}.controls{display:flex;gap:8px;align-items:center}button{border:0;border-radius:9px;padding:9px 13px;cursor:pointer}.book{height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;perspective:1800px;padding:18px}.page{height:calc(100vh - 95px);max-width:92vw;box-shadow:0 18px 55px #0008;border-radius:3px;transition:transform .38s ease,opacity .25s;background:white;object-fit:contain}.turn{transform:rotateY(-12deg) scale(.97);opacity:.5}.hint{font-size:12px;opacity:.8}@media(max-width:700px){.hint{display:none}.top{padding:0 10px}.page{max-width:98vw;height:auto;max-height:calc(100vh - 85px)}} </style></head><body><div class="top"><div class="brand">Katalog Azarine 2026</div><div class="controls"><span id="counter" class="hint"></span><button onclick="prev()">◀</button><button onclick="next()">▶</button><button onclick="document.documentElement.requestFullscreen?.()">⛶</button></div></div><main class="book" id="book"><img id="page" class="page" alt="Halaman katalog"></main><script>const total=19;let n=1;const img=document.getElementById('page'),counter=document.getElementById('counter');function src(i){return `page-${String(i).padStart(2,'0')}.jpg`}function show(dir=0){img.classList.add('turn');setTimeout(()=>{img.src=src(n);counter.textContent=`${n} / ${total}`;img.classList.remove('turn')},150)}function next(){if(n<total){n++;show(1)}}function prev(){if(n>1){n--;show(-1)}}document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});let x=0;document.addEventListener('touchstart',e=>x=e.touches[0].clientX);document.addEventListener('touchend',e=>{let d=e.changedTouches[0].clientX-x;if(d<-45)next();if(d>45)prev()});show();</script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Katalog Azarine</title>
+<meta name="theme-color" content="#0f2f2a" />
+<style>
+:root{
+  --bg:#0d1715; --panel:#12231f; --ink:#f7fbf9; --muted:#a9bbb5;
+  --accent:#d9f0e7; --book:#f6f2ea; --shadow:rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 50% 10%,#1b3a33 0,#12251f 28%,#0b1412 70%);
+  color:var(--ink); overflow:hidden;
+}
+.app{height:100%;display:grid;grid-template-rows:auto 1fr auto}
+header{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(8,18,15,.72);backdrop-filter:blur(14px)
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{
+  width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#e8f7f1,#b7d9cd);color:#163b33;font-weight:800;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)
+}
+.brand h1{font-size:15px;margin:0;white-space:nowrap}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+button,.btn{
+  appearance:none;border:1px solid rgba(255,255,255,.12);background:#17322b;color:#fff;
+  border-radius:11px;padding:9px 12px;font:inherit;font-size:13px;cursor:pointer;
+  transition:.2s ease;box-shadow:0 5px 18px rgba(0,0,0,.18);text-decoration:none
+}
+button:hover,.btn:hover{transform:translateY(-1px);background:#1d4037}
+button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.stage{position:relative;display:grid;place-items:center;padding:24px 16px;min-height:0}
+.book-wrap{position:relative;max-width:1180px;width:min(94vw,1180px);height:min(78vh,780px);perspective:2200px}
+.book{
+  position:absolute;inset:0;margin:auto;display:flex;justify-content:center;align-items:center;
+  transform-style:preserve-3d;filter:drop-shadow(0 28px 36px rgba(0,0,0,.5));
+}
+.sheet{
+  position:relative;height:100%;aspect-ratio:1.414/1;display:flex;overflow:visible;
+}
+.page{
+  position:relative;width:50%;height:100%;background:#fff;overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.page.left{border-radius:12px 2px 2px 12px}
+.page.right{border-radius:2px 12px 12px 2px}
+.page img{width:100%;height:100%;object-fit:contain;background:#fff;display:block}
+.gutter{
+  position:absolute;z-index:5;left:50%;top:0;bottom:0;width:22px;transform:translateX(-50%);
+  background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(255,255,255,.08),rgba(0,0,0,.12));
+  filter:blur(1px);pointer-events:none;mix-blend-mode:multiply
+}
+.edge{
+  position:absolute;inset:4px -8px 4px auto;width:8px;border-radius:0 8px 8px 0;
+  background:repeating-linear-gradient(180deg,#f7f4ee 0 2px,#ddd7cd 2px 3px);
+  box-shadow:4px 3px 10px rgba(0,0,0,.18)
+}
+.turning{
+  position:absolute;z-index:20;top:0;height:100%;width:50%;
+  transform-style:preserve-3d;transform-origin:left center;pointer-events:none;
+}
+.turning.next{left:50%;animation:flipNext .72s cubic-bezier(.22,.75,.25,1) forwards}
+.turning.prev{left:50%;transform-origin:left center;animation:flipPrev .72s cubic-bezier(.22,.75,.25,1) forwards}
+.face{
+  position:absolute;inset:0;backface-visibility:hidden;background:#fff;overflow:hidden;
+  box-shadow:0 0 28px rgba(0,0,0,.22)
+}
+.face img{width:100%;height:100%;object-fit:contain;background:#fff}
+.back{transform:rotateY(180deg)}
+@keyframes flipNext{from{transform:rotateY(0)}to{transform:rotateY(-180deg)}}
+@keyframes flipPrev{from{transform:rotateY(-180deg)}to{transform:rotateY(0)}}
+.nav{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:40;
+  width:48px;height:48px;border-radius:50%;padding:0;display:grid;place-items:center;
+  background:rgba(17,39,33,.82);font-size:24px
+}
+#prev{left:8px} #next{right:8px}
+.status{
+  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+  background:rgba(8,20,17,.78);border:1px solid rgba(255,255,255,.1);
+  border-radius:999px;padding:7px 11px;color:#d7e5e0;font-size:12px;backdrop-filter:blur(12px)
+}
+footer{
+  display:flex;justify-content:center;align-items:center;gap:8px;padding:10px 14px;
+  color:var(--muted);font-size:11px;border-top:1px solid rgba(255,255,255,.06)
+}
+.hint{display:none}
+@media (max-width:760px){
+  header{padding:10px 12px}.brand small{display:none}.toolbar .hide-mobile{display:none}
+  .stage{padding:10px 8px 18px}
+  .book-wrap{height:min(77vh,760px);width:96vw}
+  .sheet{aspect-ratio:auto;width:min(92vw,520px)}
+  .page{width:100%}.page.left{display:none}.page.right{border-radius:12px}
+  .gutter,.edge{display:none}.turning{width:100%;left:0!important}
+  .turning.next,.turning.prev{transform-origin:left center}
+  #prev{left:4px}#next{right:4px}.nav{width:44px;height:44px}
+  .hint{display:block}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo">AZ</div>
+    <div><h1>Katalog Azarine</h1><small>Digital Flipbook • Marketplace Edition</small></div>
+  </div>
+  <div class="toolbar">
+    <button id="first" class="hide-mobile" title="Halaman pertama">⏮</button>
+    <button id="fullscreen" title="Layar penuh">⛶</button>
+    <a class="btn hide-mobile" href="katalog-azarine.pdf" target="_blank" rel="noopener">PDF</a>
+  </div>
+</header>
+
+<main class="stage">
+  <button class="nav" id="prev" aria-label="Halaman sebelumnya">‹</button>
+  <div class="book-wrap" id="bookWrap">
+    <div class="book">
+      <div class="sheet" id="sheet">
+        <div class="page left" id="leftPage"><img id="leftImg" alt=""></div>
+        <div class="page right" id="rightPage"><img id="rightImg" alt=""></div>
+        <div class="gutter"></div><div class="edge"></div>
+      </div>
+    </div>
+    <div class="status" id="status">Memuat…</div>
+  </div>
+  <button class="nav" id="next" aria-label="Halaman berikutnya">›</button>
+</main>
+
+<footer>
+  <span>Geser/klik untuk membalik halaman.</span>
+  <span class="hint">• Swipe juga bisa.</span>
+</footer>
+</div>
+
+<script>
+const TOTAL=19;
+const src=n=>`page-${String(n).padStart(2,'0')}.jpg`;
+const leftImg=document.getElementById('leftImg');
+const rightImg=document.getElementById('rightImg');
+const leftPage=document.getElementById('leftPage');
+const sheet=document.getElementById('sheet');
+const status=document.getElementById('status');
+const prev=document.getElementById('prev');
+const next=document.getElementById('next');
+let index=1, animating=false;
+const mobile=()=>matchMedia('(max-width:760px)').matches;
+
+for(let i=1;i<=TOTAL;i++){const im=new Image();im.src=src(i)}
+
+function spread(){
+  if(mobile()){
+    leftPage.style.display='none';
+    rightImg.src=src(index); rightImg.alt=`Halaman ${index}`;
+    status.textContent=`${index} / ${TOTAL}`;
+    prev.disabled=index<=1; next.disabled=index>=TOTAL;
+  }else{
+    leftPage.style.display='';
+    let l=index, r=index+1;
+    leftImg.src=l<=TOTAL?src(l):''; leftImg.alt=l<=TOTAL?`Halaman ${l}`:'';
+    rightImg.src=r<=TOTAL?src(r):src(l); rightImg.alt=r<=TOTAL?`Halaman ${r}`:'';
+    status.textContent=r<=TOTAL?`${l}–${r} / ${TOTAL}`:`${l} / ${TOTAL}`;
+    prev.disabled=index<=1; next.disabled=index>=TOTAL;
+  }
+}
+function clampIndex(n){
+  if(mobile()) return Math.max(1,Math.min(TOTAL,n));
+  n=Math.max(1,Math.min(TOTAL,n));
+  if(n%2===0)n--;
+  return n;
+}
+function turn(dir){
+  if(animating)return;
+  const step=mobile()?1:2;
+  const target=clampIndex(index+(dir==='next'?step:-step));
+  if(target===index)return;
+  animating=true;
+  const t=document.createElement('div');
+  t.className='turning '+dir;
+  const front=document.createElement('div');front.className='face front';
+  const back=document.createElement('div');back.className='face back';
+  const f=document.createElement('img'), b=document.createElement('img');
+  f.src=src(dir==='next'?(mobile()?index:Math.min(index+1,TOTAL)):target);
+  b.src=src(dir==='next'?target:index);
+  front.appendChild(f);back.appendChild(b);t.append(front,back);
+  document.querySelector('.book').appendChild(t);
+  setTimeout(()=>{index=target;spread();t.remove();animating=false},720);
+}
+next.onclick=()=>turn('next'); prev.onclick=()=>turn('prev');
+document.getElementById('first').onclick=()=>{index=1;spread()};
+document.getElementById('fullscreen').onclick=()=>{
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown')turn('next');
+  if(e.key==='ArrowLeft'||e.key==='PageUp')turn('prev');
+  if(e.key==='Home'){index=1;spread()}
+});
+let sx=0,sy=0;
+sheet.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+sheet.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){dx<0?turn('next'):turn('prev')}
+},{passive:true});
+rightPage.addEventListener('click',e=>{
+  const r=rightPage.getBoundingClientRect();
+  e.clientX-r.left>r.width*.55?turn('next'):turn('prev');
+});
+window.addEventListener('resize',()=>{index=clampIndex(index);spread()});
+spread();
+</script>
+</body>
+</html>
